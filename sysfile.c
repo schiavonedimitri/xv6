@@ -436,20 +436,17 @@ int sys_sem_destroy(int sem){
 int sys_sem_init(int sem, int count){
 	argint(0, &sem);
 	argint(1, &count);
-	sem_init(sem, count);
-	return 1;
+	return sem_init(sem, count);
 }
 
 int sys_sem_post(int sem){
 	argint(0, &sem);	
-	sem_post(sem);
-	return 1;
+	return sem_post(sem);
 }
 
 int sys_sem_wait(int sem){
 	argint(0, &sem);	
-	sem_wait(sem);
-	return 1;
+	return sem_wait(sem);
 }
 
 
