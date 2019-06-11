@@ -28,6 +28,12 @@ struct file*    filealloc(void);
 void            fileclose(struct file*);
 struct file*    filedup(struct file*);
 void            fileinit(void);
+void						semaphore_init(void);
+int							sem_alloc(void);
+int							sem_destroy(int);
+int							sem_init(int, int);
+int							sem_post(int);
+int							sem_wait(int);
 int             fileread(struct file*, char*, int n);
 int             filestat(struct file*, struct stat*);
 int             filewrite(struct file*, char*, int n);
@@ -116,6 +122,7 @@ void            userinit(void);
 int             wait(void);
 void            wakeup(void*);
 void            yield(void);
+void						sem_alloc_proctable(int);
 
 // swtch.S
 void            swtch(struct context**, struct context*);

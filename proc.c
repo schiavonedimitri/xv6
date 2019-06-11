@@ -26,6 +26,13 @@ pinit(void)
   initlock(&ptable.lock, "ptable");
 }
 
+void sem_alloc_proctable(int sem){
+	acquire(&ptable.lock);
+	proc->sem[sem] = 1;
+	release(&ptable.lock);
+	return;
+}
+
 //PAGEBREAK: 32
 // Look in the process table for an UNUSED proc.
 // If found, change state to EMBRYO and initialize
@@ -153,7 +160,6 @@ fork(void)
     if(proc->ofile[i])
       np->ofile[i] = filedup(proc->ofile[i]);
   np->cwd = idup(proc->cwd);
- 
   pid = np->pid;
   np->state = RUNNABLE;
   safestrcpy(np->name, proc->name, sizeof(proc->name));
@@ -182,6 +188,13 @@ exit(void)
 
   iput(proc->cwd);
   proc->cwd = 0;
+
+	int i;
+	for(i = 0; i < NSEM; i++){
+		if(proc->sem[i] == 1 && proc->parent->sem[i] != 1){
+			sem_destroy(i);
+		} 
+	}
 
   acquire(&ptable.lock);
 

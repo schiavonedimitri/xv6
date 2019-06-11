@@ -33,6 +33,7 @@ main(void)
   fileinit();      // file table
   iinit();         // inode cache
   ideinit();       // disk
+	semaphore_init(); //semaphore initialization
   if(!ismp)
     timerinit();   // uniprocessor timer
   startothers();   // start other processors
