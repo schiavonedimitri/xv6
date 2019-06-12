@@ -18,7 +18,6 @@
 #define SYS_sem_init 		17
 #define SYS_sem_post 		18
 #define SYS_sem_wait 		19
-
 #define SYS_open   			20
 #define SYS_write  			21
 #define SYS_mknod  			22

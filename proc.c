@@ -26,6 +26,7 @@ pinit(void)
   initlock(&ptable.lock, "ptable");
 }
 
+// after a user space process calls sem_alloc record its usage in the process proc table
 void sem_alloc_proctable(int sem){
 	acquire(&ptable.lock);
 	proc->sem[sem] = 1;

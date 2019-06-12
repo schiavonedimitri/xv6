@@ -66,7 +66,7 @@ struct proc {
   struct file *ofile[NOFILE];  // Open files
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
-	int sem[NSEM];
+	int sem[NSEM];							 //	Used semaphores by this process sem[i] = 0 unused, sem[i] = 1 used
 };
 
 // Process memory is laid out contiguously, low addresses first:

@@ -15,12 +15,14 @@ OBJS = \
 	picirq.o\
 	pipe.o\
 	proc.o\
+	semaphore.o\
 	spinlock.o\
 	string.o\
 	swtch.o\
 	syscall.o\
 	sysfile.o\
 	sysproc.o\
+	syssem.o\
 	timer.o\
 	trapasm.o\
 	trap.o\
