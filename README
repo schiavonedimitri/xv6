@@ -2,6 +2,26 @@ This version of xv6 was modified by Dimitri Schiavone to add the semaphores syst
 as per an assignment at the course "System and device programming" at the Polytechnic University of Turin.
 You can find the text of the assignment in the pdf file "assignment.pdf" in this repository.
 
+Design and implementation notes:
+I went with the route of compile time allocated semaphores for simplicity and because the function prototypes in the assignment had integer type arguments.
+The basic idea is to have a pre defined table of semaphores and to use the integer arguments to index into this table. 
+At system startup main.c calls semaphore_init() which just loops over the semaphore table flagging all entries as free.
+After that when a user program issues sem_alloc(), the function scans through the table to find the first entry flagged as free and returns the index of this 
+entry to the user;on the other hand if there is no free entry the function returns -1 to its caller.
+All the other functions take atleast the index of the semaphore as the argument and use pointer arithmetic to check wether the index provided by the user program
+is in the range of valid indexes. The code should be self explanatory.
+Lastly i did some extra work to automatically destroy semaphores used by a process when it exits. To do so i added a field in the per process proc table that is
+an array large NSEM like the semaphore table; every entry of this array can be 1 or 0 to indicate wether this process is using semaphore[i] or not. 
+In the code of exit in "proc.c" i added code for checking wether the exiting process is using any semaphore and if its parent is not using them, in this case
+i call sem_destroy() for each semaphore that has to be destroyed.
+
+Final observations:
+I acknowledge that this implementation lacks many features like dynamic allocation of semaphore, per process semaphores and also i acknowledge a pitfall of my design.
+That is, semaphores are not protected by other processes e.g. what happens if another process that has not allocated a semaphore calls sem_wait() or sem_post() on a 
+semaphore allocated by another process? The programs might deadlock or interfere with each other.
+Correcting this behaviour might happen in the future when i have more time to play with xv6(for now i just had to have simple working semaphores for the assignment).
+The interested readers should take this into account when using this source and eventually add any needed modifications.
+
 xv6 is a re-implementation of Dennis Ritchie's and Ken Thompson's Unix
 Version 6 (v6).  xv6 loosely follows the structure and style of v6,
 but is implemented for a modern x86-based multiprocessor using ANSI C.
