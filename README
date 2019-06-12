@@ -18,8 +18,11 @@ i call sem_destroy() for each semaphore that has to be destroyed.
 Final observations:
 I acknowledge that this implementation lacks many features like dynamic allocation of semaphore, per process semaphores and also i acknowledge a pitfall of my design.
 That is, semaphores are not protected by other processes e.g. what happens if another process that has not allocated a semaphore calls sem_wait() or sem_post() on a 
-semaphore allocated by another process? The programs might deadlock or interfere with each other.
-Correcting this behaviour might happen in the future when i have more time to play with xv6(for now i just had to have simple working semaphores for the assignment).
+semaphore allocated by another process? The programs might deadlock or interfere with each other. Also what happens if you try to destroy a semaphore and then allocate
+it in another part of the program or in another process and call sem_wait() or sem_post without calling first sem_init()? You get to use the semaphore with the previous
+count value that was initialized previously. My design relies on the user programs not doing bad things and that assumption holds as long as i am the only user of the 
+system.
+Correcting these bugs might happen in the future when i have more time to play with xv6(for now i just had to have simple working semaphores for the assignment).
 The interested readers should take this into account when using this source and eventually add any needed modifications.
 
 xv6 is a re-implementation of Dennis Ritchie's and Ken Thompson's Unix

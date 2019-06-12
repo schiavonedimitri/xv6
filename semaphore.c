@@ -41,9 +41,7 @@ int sem_destroy(int sem){
 		release(&semtable.lock);		
 		return -1;
 	} 
-	while(semph->count < 0){
-		wakeup(semph);
-	}
+	wakeup(semph);
 	semph->free = S_FREE;
 	release(&semtable.lock);
 	return 0;	
