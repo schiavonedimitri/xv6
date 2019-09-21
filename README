@@ -12,12 +12,12 @@ All the other functions take atleast the index of the semaphore as the argument 
 is in the range of valid indexes. The code should be self explanatory.
 Lastly i did some extra work to automatically destroy semaphores used by a process when it exits. To do so i added a field in the per process proc table that is
 an array large NSEM like the semaphore table; every entry of this array can be 1 or 0 to indicate wether this process is using semaphore[i] or not. 
-In the code of exit in "proc.c" i added code for checking wether the exiting process is using any semaphore and if its parent is not using them, in this case
+In the code of exit in "proc.c" i have added the code for checking wether the exiting process is using any semaphore and if its parent is not using them, in this case
 i call sem_destroy() for each semaphore that has to be destroyed.
 
 Final observations:
-I acknowledge that this implementation lacks many features like dynamic allocation of semaphore, per process semaphores and also i acknowledge a pitfall of my design.
-That is, semaphores are not protected by other processes e.g. what happens if another process that has not allocated a semaphore calls sem_wait() or sem_post() on a 
+I acknowledge that this implementation lacks many features like dynamic allocation of semaphore (this is because i did not implement kmalloc for xv6), per process semaphores and also i acknowledge a pitfall of my design.
+That is, semaphores are not protected by other processes (they behave like named semaphores on other systems whereas they should worl like unnamed ones) e.g. what happens if another process that has not allocated a semaphore calls sem_wait() or sem_post() on a 
 semaphore allocated by another process? The programs might deadlock or interfere with each other. Also what happens if you try to destroy a semaphore and then allocate
 it in another part of the program or in another process and call sem_wait() or sem_post without calling first sem_init()? You get to use the semaphore with the previous
 count value that was initialized previously. My design relies on the user programs not doing bad things and that assumption holds as long as i am the only user of the 
