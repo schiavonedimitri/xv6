@@ -4,7 +4,8 @@ You can find the text of the assignment in the pdf file "assignment.pdf" in this
 
 Design and implementation notes:
 The semaphores are implemented according to the assignment and not according to robustness, efficiency or features.
-Xv6 doesn't provide a kernel heap manager nor a slab allocator for objects (which could be easily implemented) so i didn't bother to implement dynamically allocated semaphores and went with the route of compile time allocation. 
+Xv6 doesn't provide a kernel heap manager nor a slab allocator for objects (which could be easily implemented) so i didn't bother to implement dynamically 
+allocated semaphores and went with the route of compile time allocation. 
 The code is really really easy to understand so i won't comment on that.
 
 xv6 is a re-implementation of Dennis Ritchie's and Ken Thompson's Unix
