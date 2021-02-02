@@ -1,29 +1,12 @@
 This version of xv6 was modified by Dimitri Schiavone to add the semaphores system calls and functionality
-as per an assignment at the course "System and device programming" at the Polytechnic University of Turin.
+as per an assignment at the course "System and device programming" at the Polytechnic University of Turin (Year 2019).
 You can find the text of the assignment in the pdf file "assignment.pdf" in this repository.
 
 Design and implementation notes:
-I went with the route of compile time allocated semaphores for simplicity and because the function prototypes in the assignment had integer type arguments.
-The basic idea is to have a pre defined table of semaphores and to use the integer arguments to index into this table. 
-At system startup main.c calls semaphore_init() which just loops over the semaphore table flagging all entries as free.
-After that when a user program issues sem_alloc(), the function scans through the table to find the first entry flagged as free and returns the index of this 
-entry to the user;on the other hand if there is no free entry the function returns -1 to its caller.
-All the other functions take atleast the index of the semaphore as the argument and use pointer arithmetic to check wether the index provided by the user program
-is in the range of valid indexes. The code should be self explanatory.
-Lastly i did some extra work to automatically destroy semaphores used by a process when it exits. To do so i added a field in the per process proc table that is
-an array large NSEM like the semaphore table; every entry of this array can be 1 or 0 to indicate wether this process is using semaphore[i] or not. 
-In the code of exit in "proc.c" i have added the code for checking wether the exiting process is using any semaphore and if its parent is not using them, in this case
-i call sem_destroy() for each semaphore that has to be destroyed.
-
-Final observations:
-I acknowledge that this implementation lacks many features like dynamic allocation of semaphore (this is because i did not implement kmalloc for xv6), per process semaphores and also i acknowledge a pitfall of my design.
-That is, semaphores are not protected by other processes (they behave like named semaphores on other systems whereas they should worl like unnamed ones) e.g. what happens if another process that has not allocated a semaphore calls sem_wait() or sem_post() on a 
-semaphore allocated by another process? The programs might deadlock or interfere with each other. Also what happens if you try to destroy a semaphore and then allocate
-it in another part of the program or in another process and call sem_wait() or sem_post without calling first sem_init()? You get to use the semaphore with the previous
-count value that was initialized previously. My design relies on the user programs not doing bad things and that assumption holds as long as i am the only user of the 
-system.
-Correcting these bugs might happen in the future when i have more time to play with xv6(for now i just had to have simple working semaphores for the assignment).
-The interested readers should take this into account when using this source and eventually add any needed modifications.
+The semaphores are implemented according to the assignment and not according to robustness, efficiency or features.
+Xv6 doesn't provide a kernel heap manager nor a slab allocator for objects (which could be easily implemented) so i didn't bother to implement
+dynamically allocated semaphores and went with the route of compile time allocation. 
+The code is really really easy to understand so i won't comment on that.
 
 xv6 is a re-implementation of Dennis Ritchie's and Ken Thompson's Unix
 Version 6 (v6).  xv6 loosely follows the structure and style of v6,
